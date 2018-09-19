@@ -1,11 +1,10 @@
 /*
   This ESP8266 Web Socket Remote based on:
+  https://github.com/tzapu/WiFiManager
   https://github.com/Links2004/arduinoWebSockets
   https://gist.github.com/rjrodger/1011032
 */
 
-#define AP_SSID "YOUR MOBILE HOTSPOT SSID"
-#define AP_PASSWORD "YOUR MOBILE HOTSPOT PASSWORD"
 #define MDNS_NAME "espwsremote"
 
 #define LEFT_A  D2
@@ -17,14 +16,12 @@
 
 #include <Arduino.h>
 
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <WebSocketsServer.h>
-#include <ESP8266WebServer.h>
+#include <DNSServer.h>
 #include <ESP8266mDNS.h>
+#include <ESP8266WebServer.h>
 #include <Hash.h>
-
-ESP8266WiFiMulti WiFiMulti;
+#include <WebSocketsServer.h>
+#include <WiFiManager.h>
 
 ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
@@ -110,6 +107,15 @@ void setup() {
 
   //USE_SERIAL.setDebugOutput(true);
 
+  //WiFiManager
+  //Local intialization. Once its business is done, there is no need to keep it around
+  WiFiManager wifiManager;
+  //reset saved settings
+  //wifiManager.resetSettings();
+  wifiManager.autoConnect(MDNS_NAME);
+  //or use this for auto generated name ESP + ChipID
+  //wifiManager.autoConnect();
+
   for (uint8_t t = 4; t > 0; t--) {
     USE_SERIAL.printf("[SETUP] BOOT WAIT %d...\n", t);
     USE_SERIAL.flush();
@@ -122,12 +128,6 @@ void setup() {
   pinMode(RIGHT_B, OUTPUT);
 
   motor(0, 0);
-
-  WiFiMulti.addAP(AP_SSID, AP_PASSWORD);
-
-  while (WiFiMulti.run() != WL_CONNECTED) {
-    delay(100);
-  }
 
   // start webSocket server
   webSocket.begin();
