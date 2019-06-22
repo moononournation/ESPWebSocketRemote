@@ -10,14 +10,15 @@ https://gist.github.com/rjrodger/1011032
 
 ## First Time Setup Steps
 - Turn on ESP8266 Robot
-- Connect to "espweremote" AP
+- Use mobile phone connect to "espweremote" AP
+- Configuration Captive Portal popup after connected
 - Fill in your mobile phone hotspot details
 
 ## Connection Steps
 - Turn on mobile phone hotspot
 - Turn on ESP8266 Robot
 - Wait ESP8266 Robot connect to mobile phone hotspot
-- Open mobile web browser and browse to http://espwsremote.local/
+- Open mobile web browser and browse to http://espwsremote.local/ or http://10.0.4.1/
 - Enjoy!
 
 ## Demo Video
